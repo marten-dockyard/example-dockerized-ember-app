@@ -1,57 +1,45 @@
-# example-app
+# Example Dockerized Ember application
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+## Running development servers
 
-## Prerequisites
+The following will start up the development and test server and will watch live
+for changes:
+```sh
+docker-compose up
+```
 
-You will need the following things properly installed on your computer.
+## Tests
 
-* [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with npm)
-* [Ember CLI](https://ember-cli.com/)
-* [Google Chrome](https://google.com/chrome/)
+First build the test build to prepare for testing:
+```sh
+docker build --target test -t example-app-test
+```
 
-## Installation
+Then you can run your tests by running the container:
+```sh
+docker run example-app-test
+```
 
-* `git clone <repository-url>` this repository
-* `cd example-app`
-* `npm install`
+It's running `ember exam` behind the scenes, so you can split your tests across
+multiple nodes:
+```sh
+docker run example-app-test --split=4 --partition=1 --parrallel=1 --random
+docker run example-app-test --split=4 --partition=2 --parrallel=1 --random
+docker run example-app-test --split=4 --partition=3 --parrallel=1 --random
+docker run example-app-test --split=4 --partition=4 --parrallel=1 --random
+```
 
-## Running / Development
+## Production server
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+This creates a production build of the Ember application and bootstraps it into
+a tiny express server in a Docker container.
 
-### Code Generators
+First build:
+```sh
+docker build --target production -t example-app-production
+```
 
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-* `ember test`
-* `ember test --server`
-
-### Linting
-
-* `npm run lint:hbs`
-* `npm run lint:js`
-* `npm run lint:js -- --fix`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](https://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+Then run:
+```sh
+docker run --rm -p 8080:8080 example-app-build
+```
