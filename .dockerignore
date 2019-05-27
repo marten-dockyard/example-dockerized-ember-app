@@ -1,0 +1,17 @@
+# Ember
+tmp
+dist
+
+# Node
+node_modules
+npm-debug.log
+
+# Server node_modules
+server/node_modules
+
+# Docker
+.dockerignore
+docker-compose.yml
+Dockerfile
+Dockerfile-development
+

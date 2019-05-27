@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  devserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-development
+    image: example-app-development-server
+    ports:
+      - '4200:4200'
+    volumes:
+      - .:/usr/src/app
+    command: 'server'
+  testserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-development
+    image: example-app-test-server
+    ports:
+      - '7357:7357'
+    volumes:
+      - .:/usr/src/app
+    command: 'test --server --no-launch'
